@@ -4,7 +4,13 @@ import "./App.css"
 function App() {
   return (
     <>
-      <img src={cotenLogo} className="center-logo" alt="Coten logo" />
+      <div className="intro flex items-center justify-center h-screen w-screen">
+        <img
+          src={cotenLogo}
+          className="h-1/3 w-1/3 animate-slide-out-fwd-center"
+          alt="Coten logo"
+        />
+      </div>
     </>
   )
 }
