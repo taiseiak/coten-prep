@@ -16,7 +16,6 @@ const config: CodegenConfig = {
   generates: {
     './src/generated/gql/': {
       preset: 'client',
-      plugins: ['typescript', 'typescript-operations'],
     },
   },
   hooks: {
