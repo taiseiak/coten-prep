@@ -1,7 +1,26 @@
-import cotenLogo from '/cotenLogo.svg'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './App.css'
+import UserPage from './pages/UserPage'
+import cotenLogo from '/cotenLogo.svg'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <DefaultPage />,
+  },
+  {
+    path: ':userId',
+    element: <UserPage />,
+  },
+])
 
 function App() {
+  return <RouterProvider router={router} />
+}
+
+export default App
+
+function DefaultPage() {
   return (
     <>
       <main>
@@ -26,5 +45,3 @@ function App() {
     </>
   )
 }
-
-export default App
