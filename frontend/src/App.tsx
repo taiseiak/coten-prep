@@ -2,6 +2,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './App.css'
 import UserPage from './pages/UserPage'
 import cotenLogo from '/cotenLogo.svg'
+import { Provider } from 'urql'
+import { client } from './utils/createUrqlClient'
 
 const router = createBrowserRouter([
   {
@@ -15,7 +17,11 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <Provider value={client}>
+      <RouterProvider router={router} />{' '}
+    </Provider>
+  )
 }
 
 export default App
