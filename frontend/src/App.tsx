@@ -1,5 +1,5 @@
-import cotenLogo from "/cotenLogo.svg";
-import "./App.css";
+import cotenLogo from '/cotenLogo.svg'
+import './App.css'
 
 function App() {
   return (
@@ -19,13 +19,12 @@ function App() {
                 Yozora
               </h1>
               <p className="max-w-2xl">See a sky full of memories</p>
-              <input type="text" placeholder="Search" />
             </div>
           </div>
         </section>
       </main>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
