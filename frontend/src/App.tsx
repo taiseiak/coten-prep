@@ -24,24 +24,6 @@ function App() {
       <div className="relative h-full w-full overflow-auto touch-auto">
         <RouterProvider router={router} />
       </div>
-      {/* <Canvas
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          pointerEvents: 'none',
-          zIndex: -99,
-        }}
-      >
-        <color attach="background" args={['black']} />
-        <Suspense fallback={null}>
-          <StarsComponent />
-        </Suspense>
-        <r3f.Out />
-        <Preload all />
-      </Canvas> */}
       <Canvas />
     </Provider>
   )
