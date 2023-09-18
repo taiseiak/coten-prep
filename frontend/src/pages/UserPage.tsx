@@ -21,10 +21,10 @@ export default function UserPage() {
     query: userMemoriesQuery,
   })
   return (
-    <section className="bg-white dark:bg-slate-700">
+    <section className="bg-slate-700">
       <div className="mx-auto grid max-w-screen-xl px-4 py-8">
         <div className="mr-auto place-self-center">
-          <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-sky-400 dark:text-slate-200">
+          <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
             User page
           </h1>
           <div>
@@ -33,7 +33,7 @@ export default function UserPage() {
                 {data.memoriesCollection?.edges?.map(
                   (e, i) =>
                     e?.node && (
-                      <li className="text-white text-xl" key={i}>
+                      <li className="text-slate-200 text-xl" key={i}>
                         {e.node.description}
                       </li>
                     )
