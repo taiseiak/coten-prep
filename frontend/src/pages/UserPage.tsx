@@ -1,7 +1,7 @@
 import { useQuery } from 'urql'
 import { graphql } from '../generated/gql'
 import { supabase } from '../utils/supabase'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
 const userMemoriesQuery = graphql(/* GraphQL */ `
@@ -40,7 +40,7 @@ export default function UserPage() {
     },
   })
 
-  if (error || !data?.usersCollection?.edges.length) {
+  if (error) {
     return (
       <section className="h-screen w-full">
         <div className="mx-auto grid max-w-screen-xl px-4 py-8">
@@ -57,33 +57,37 @@ export default function UserPage() {
   return (
     <section>
       <div className="mx-auto grid max-w-screen-xl px-4 py-8">
-        <div className="mr-auto place-self-center">
-          <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
-            {data
-              ? `${data.usersCollection?.edges[0].node.user_name}'s Yozora`
-              : null}
-          </h1>
-          <div>
-            {data && (
-              <ul>
-                {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
-                  (e: edge, i: number) =>
-                    e.node && (
-                      <li className="text-slate-200 text-xl" key={i}>
-                        {e.node.description}
-                        {e.node.image_path ? (
-                          <MemoryImage imageUrl={e.node.image_path} />
-                        ) : null}
-                      </li>
-                    )
-                )}
-              </ul>
-            )}
-          </div>
-        </div>
+        <Suspense fallback={<Loading />}>
+          {data && (
+            <div className="mr-auto place-self-center">
+              <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+                {data.usersCollection?.edges[0].node.user_name}'s Yozora
+              </h1>
+              <div>
+                <ul>
+                  {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
+                    (e: edge, i: number) =>
+                      e.node && (
+                        <li className="text-slate-200 text-xl" key={i}>
+                          {e.node.description}
+                          {e.node.image_path ? (
+                            <MemoryImage imageUrl={e.node.image_path} />
+                          ) : null}
+                        </li>
+                      )
+                  )}
+                </ul>
+              </div>
+            </div>
+          )}
+        </Suspense>
       </div>
     </section>
   )
+}
+
+function Loading() {
+  return <h2>🌀 Loading...</h2>
 }
 
 interface MemoryImageProps {
