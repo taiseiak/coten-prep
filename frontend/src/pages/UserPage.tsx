@@ -1,5 +1,7 @@
 import { useQuery } from 'urql'
 import { graphql } from '../generated/gql'
+import type { MemoriesEdge, Memories } from '../generated/gql/graphql'
+import { supabase } from '../utils/supabase'
 
 const userMemoriesQuery = graphql(/* GraphQL */ `
   query userMemoriesQuery {
@@ -10,6 +12,7 @@ const userMemoriesQuery = graphql(/* GraphQL */ `
         node {
           id
           description
+          image_path
         }
       }
     }
@@ -31,10 +34,11 @@ export default function UserPage() {
             {data && (
               <ul>
                 {data.memoriesCollection?.edges?.map(
-                  (e, i) =>
-                    e?.node && (
+                  (e: MemoriesEdge, i: number) =>
+                    e.node && (
                       <li className="text-slate-200 text-xl" key={i}>
                         {e.node.description}
+                        <MemoryImage imageUrl={e.node.image_path} />
                       </li>
                     )
                 )}
@@ -45,4 +49,17 @@ export default function UserPage() {
       </div>
     </section>
   )
+}
+
+interface MemoryImageProps {
+  imageUrl: string
+}
+
+function MemoryImage({ imageUrl }: MemoryImageProps) {
+  // "taiseiklasen-memories-bucket/DSCF1345.webp" => ["taiseiklasen-memories-bucket", "DSCF1345.webp", ""]
+  const [bucketName, imagePath] = imageUrl.split(/\/(.*)/)
+  const { data } = supabase.storage.from(bucketName).getPublicUrl(imagePath)
+  console.log(data)
+
+  return <img src={data.publicUrl} />
 }
