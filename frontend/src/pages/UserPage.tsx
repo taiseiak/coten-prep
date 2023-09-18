@@ -2,17 +2,22 @@ import { useQuery } from 'urql'
 import { graphql } from '../generated/gql'
 import { supabase } from '../utils/supabase'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
 
 const userMemoriesQuery = graphql(/* GraphQL */ `
-  query userMemoriesQuery {
-    memoriesCollection(
-      filter: { user_id: { eq: "cefb6b04-d3c0-40b9-93f4-feab3b2ee528" } }
-    ) {
+  query UserMemoriesQuery($userName: String) {
+    usersCollection(filter: { user_name: { eq: $userName } }) {
       edges {
         node {
-          id
-          description
-          image_path
+          user_name
+          memoriesCollection {
+            edges {
+              node {
+                description
+                image_path
+              }
+            }
+          }
         }
       }
     }
@@ -27,20 +32,41 @@ type edge = {
 }
 
 export default function UserPage() {
-  const [{ data }] = useQuery({
+  const { userId } = useParams()
+  const [{ data, error }] = useQuery({
     query: userMemoriesQuery,
+    variables: {
+      userName: userId,
+    },
   })
+
+  if (error || !data?.usersCollection?.edges.length) {
+    return (
+      <section className="bg-slate-700 h-screen w-full">
+        <div className="mx-auto grid max-w-screen-xl px-4 py-8">
+          <div className="mr-auto place-self-center">
+            <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+              User doesn't exist
+            </h1>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="bg-slate-700">
       <div className="mx-auto grid max-w-screen-xl px-4 py-8">
         <div className="mr-auto place-self-center">
           <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
-            User page
+            {data
+              ? `${data.usersCollection?.edges[0].node.user_name}'s Yozora`
+              : null}
           </h1>
           <div>
             {data && (
               <ul>
-                {data.memoriesCollection?.edges?.map(
+                {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
                   (e: edge, i: number) =>
                     e.node && (
                       <li className="text-slate-200 text-xl" key={i}>
