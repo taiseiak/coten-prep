@@ -1,7 +1,7 @@
 import { useQuery } from 'urql'
 import { graphql } from '../generated/gql'
-import type { MemoriesEdge, Memories } from '../generated/gql/graphql'
 import { supabase } from '../utils/supabase'
+import { useEffect, useState } from 'react'
 
 const userMemoriesQuery = graphql(/* GraphQL */ `
   query userMemoriesQuery {
@@ -19,6 +19,13 @@ const userMemoriesQuery = graphql(/* GraphQL */ `
   }
 `)
 
+type edge = {
+  node: {
+    description: string
+    image_path?: string | null
+  }
+}
+
 export default function UserPage() {
   const [{ data }] = useQuery({
     query: userMemoriesQuery,
@@ -34,11 +41,13 @@ export default function UserPage() {
             {data && (
               <ul>
                 {data.memoriesCollection?.edges?.map(
-                  (e: MemoriesEdge, i: number) =>
+                  (e: edge, i: number) =>
                     e.node && (
                       <li className="text-slate-200 text-xl" key={i}>
                         {e.node.description}
-                        <MemoryImage imageUrl={e.node.image_path} />
+                        {e.node.image_path ? (
+                          <MemoryImage imageUrl={e.node.image_path} />
+                        ) : null}
                       </li>
                     )
                 )}
@@ -56,10 +65,13 @@ interface MemoryImageProps {
 }
 
 function MemoryImage({ imageUrl }: MemoryImageProps) {
-  // "taiseiklasen-memories-bucket/DSCF1345.webp" => ["taiseiklasen-memories-bucket", "DSCF1345.webp", ""]
-  const [bucketName, imagePath] = imageUrl.split(/\/(.*)/)
-  const { data } = supabase.storage.from(bucketName).getPublicUrl(imagePath)
-  console.log(data)
+  const [publicUrl, setPublicUrl] = useState<string>('')
+  useEffect(() => {
+    // "taiseiklasen-memories-bucket/DSCF1345.webp" => ["taiseiklasen-memories-bucket", "DSCF1345.webp", ""]
+    const [bucketName, imagePath] = imageUrl.split(/\/(.*)/)
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(imagePath)
+    setPublicUrl(data.publicUrl)
+  }, [imageUrl])
 
-  return <img src={data.publicUrl} />
+  return <img src={publicUrl} />
 }
