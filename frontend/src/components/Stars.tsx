@@ -1,16 +1,23 @@
 import { Stars as DreiStars } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { Suspense } from 'react'
 
 export default function Stars() {
-  //   const ref = useRef<HTMLDivElement>(null!)
   return (
-    <>
-      {/* <div className="fixed inset-0 h-screen w-screen -z-10" ref={ref}></div>
-      <r3f.In>
-        <View track={ref}>
-
-        </View>
-      </r3f.In> */}
-      <DreiStars />
-    </>
+    <Canvas
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: -99,
+      }}
+    >
+      <Suspense fallback={null}>
+        <DreiStars />
+      </Suspense>
+    </Canvas>
   )
 }

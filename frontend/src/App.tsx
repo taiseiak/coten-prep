@@ -1,9 +1,12 @@
+import { Preload } from '@react-three/drei'
+import { Canvas as R3FCanvas } from '@react-three/fiber'
+import { default as React, Suspense, useRef } from 'react'
 import { Link, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Provider } from 'urql'
+import { r3f } from './utils/r3f'
 import './App.css'
 import UserPage from './pages/UserPage'
-import { Provider } from 'urql'
 import { client } from './utils/createUrqlClient'
-import React from 'react'
 
 const router = createBrowserRouter([
   {
@@ -16,15 +19,39 @@ const router = createBrowserRouter([
   },
 ])
 
-const Canvas = React.lazy(() => import('./components/Canvas'))
+const StarsComponent = React.lazy(() => import('./components/Stars'))
 
 function App() {
+  const ref = useRef(null!)
   return (
     <Provider value={client}>
-      <div className="relative h-full w-full overflow-auto touch-auto">
+      <div
+        ref={ref}
+        className="relative h-full w-full overflow-auto touch-auto"
+      >
         <RouterProvider router={router} />
       </div>
-      <Canvas />
+      <Suspense fallback={null}>
+        <StarsComponent />
+      </Suspense>
+      <R3FCanvas
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          pointerEvents: 'none',
+          zIndex: -90,
+        }}
+        eventSource={ref}
+        eventPrefix="client"
+      >
+        <Suspense fallback={null}>
+          <r3f.Out />
+          <Preload all />
+        </Suspense>
+      </R3FCanvas>
     </Provider>
   )
 }
