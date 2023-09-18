@@ -1,9 +1,9 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Link, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './App.css'
 import UserPage from './pages/UserPage'
-import cotenLogo from '/cotenLogo.svg'
 import { Provider } from 'urql'
 import { client } from './utils/createUrqlClient'
+import React from 'react'
 
 const router = createBrowserRouter([
   {
@@ -16,10 +16,33 @@ const router = createBrowserRouter([
   },
 ])
 
+const Canvas = React.lazy(() => import('./components/Canvas'))
+
 function App() {
   return (
     <Provider value={client}>
-      <RouterProvider router={router} />{' '}
+      <div className="relative h-full w-full overflow-auto touch-auto">
+        <RouterProvider router={router} />
+      </div>
+      {/* <Canvas
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          pointerEvents: 'none',
+          zIndex: -99,
+        }}
+      >
+        <color attach="background" args={['black']} />
+        <Suspense fallback={null}>
+          <StarsComponent />
+        </Suspense>
+        <r3f.Out />
+        <Preload all />
+      </Canvas> */}
+      <Canvas />
     </Provider>
   )
 }
@@ -29,15 +52,13 @@ export default App
 function DefaultPage() {
   return (
     <>
-      <main className="bg-slate-700">
-        <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-white">
-          <img
-            src={cotenLogo}
-            className="h-1/3 w-1/3 animate-slide-out-fwd-center"
-            alt="Coten logo"
-          />
+      <main>
+        <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
+          <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+            Yozora
+          </h1>
         </section>
-        <section className="bg-slate-700">
+        <section>
           <div className="mx-auto grid max-w-screen-xl px-4 py-8">
             <div className="mr-auto place-self-center">
               <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
@@ -46,6 +67,9 @@ function DefaultPage() {
               <p className="max-w-2xl text-slate-200">
                 See a sky full of memories
               </p>
+              <Link to="/taisei" className="max-w-2xl text-sky-400">
+                To Taisei's page
+              </Link>
             </div>
           </div>
         </section>

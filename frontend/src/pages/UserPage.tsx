@@ -42,7 +42,7 @@ export default function UserPage() {
 
   if (error || !data?.usersCollection?.edges.length) {
     return (
-      <section className="bg-slate-700 h-screen w-full">
+      <section className="h-screen w-full">
         <div className="mx-auto grid max-w-screen-xl px-4 py-8">
           <div className="mr-auto place-self-center">
             <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
@@ -55,7 +55,7 @@ export default function UserPage() {
   }
 
   return (
-    <section className="bg-slate-700">
+    <section>
       <div className="mx-auto grid max-w-screen-xl px-4 py-8">
         <div className="mr-auto place-self-center">
           <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
