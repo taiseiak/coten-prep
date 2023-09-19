@@ -8,6 +8,7 @@ import './App.css'
 import UserPage from './pages/UserPage'
 import { client } from './utils/createUrqlClient'
 import { graphql } from './generated/gql'
+import Scroll from './components/Scroll'
 
 const router = createBrowserRouter([
   {
@@ -45,12 +46,14 @@ function App() {
 
   return (
     <Provider value={client}>
-      <div
-        ref={ref}
-        className="relative h-full w-full overflow-auto touch-auto"
-      >
-        <RouterProvider router={router} />
-      </div>
+      <Scroll>
+        <div
+          ref={ref}
+          className="relative h-full w-full overflow-auto touch-auto"
+        >
+          <RouterProvider router={router} />{' '}
+        </div>
+      </Scroll>
       <Suspense fallback={null}>
         <StarsComponent />
       </Suspense>
@@ -83,48 +86,42 @@ function DefaultPage() {
     query: usersQuery,
   })
   return (
-    <>
-      <main>
-        <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
-          <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+    <div className="fixed inset-0">
+      <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
+        <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+          Yozora
+        </h1>
+      </section>
+      <div className="mx-auto grid max-w-screen-xl px-4 py-8 h-screen">
+        <div className="m-auto place-self-center text-center">
+          <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
             Yozora
           </h1>
-        </section>
-        <section>
-          <div className="mx-auto grid max-w-screen-xl px-4 py-8 h-screen">
-            <div className="m-auto place-self-center text-center">
-              <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
-                Yozora
-              </h1>
-              <p className="max-w-5xl text-slate-200">
-                See a sky full of memories
-              </p>
-              <Suspense fallback={null}>
-                {data && (
-                  <ul className="max-w-2xl text-sky-400">
-                    {data.usersCollection?.edges.map(
-                      (e: edge, i: number) =>
-                        e.node && (
-                          <li key={i} className="m-2">
-                            <Link
-                              to={`/${e.node.user_name}`}
-                              className="max-w-4xl text-sky-400 text-xl"
-                            >
-                              To{' '}
-                              {e.node.user_name.charAt(0).toUpperCase() +
-                                e.node.user_name.slice(1)}
-                              's page
-                            </Link>
-                          </li>
-                        )
-                    )}
-                  </ul>
+          <p className="max-w-5xl text-slate-200">See a sky full of memories</p>
+          <Suspense fallback={null}>
+            {data && (
+              <ul className="max-w-2xl text-sky-400">
+                {data.usersCollection?.edges.map(
+                  (e: edge, i: number) =>
+                    e.node && (
+                      <li key={i} className="m-2">
+                        <Link
+                          to={`/${e.node.user_name}`}
+                          className="max-w-4xl text-sky-400 text-xl"
+                        >
+                          To{' '}
+                          {e.node.user_name.charAt(0).toUpperCase() +
+                            e.node.user_name.slice(1)}
+                          's page
+                        </Link>
+                      </li>
+                    )
                 )}
-              </Suspense>
-            </div>
-          </div>
-        </section>
-      </main>
-    </>
+              </ul>
+            )}
+          </Suspense>
+        </div>
+      </div>
+    </div>
   )
 }

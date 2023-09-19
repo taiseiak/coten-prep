@@ -26,27 +26,30 @@ export default function Memory({ url, description }: MemoryProps) {
   }, [url])
 
   return (
-    <View
-      ref={ref}
-      className={`duration-[2000ms] inset-0 h-screen grow transition-all ${
-        inView ? 'translate-x-0' : '-translate-x-full'
-      }`}
-    >
-      <Suspense fallback={null}>
-        <PresentationControls
-          // global
-          snap
-          zoom={0.8}
-          rotation={[0, Math.PI * 0.05, 0]}
-          polar={[0, Math.PI / 8]}
-          azimuth={[-Math.PI / 8, Math.PI / 8]}
+    <Suspense fallback={null}>
+      {publicUrl && (
+        <View
+          ref={ref}
+          className={`duration-[2000ms] inset-0 h-screen grow transition-all ${
+            inView ? 'translate-x-0' : '-translate-x-full'
+          }`}
         >
           <Suspense fallback={null}>
-            <TextAndImage publicUrl={publicUrl} description={description} />
+            <PresentationControls
+              // global
+              snap
+              zoom={0.8}
+              polar={[0, Math.PI / 8]}
+              azimuth={[-Math.PI / 8, Math.PI / 8]}
+            >
+              <Suspense fallback={null}>
+                <TextAndImage publicUrl={publicUrl} description={description} />
+              </Suspense>
+            </PresentationControls>
+            <Preload all />
           </Suspense>
-        </PresentationControls>
-        <Preload all />
-      </Suspense>
-    </View>
+        </View>
+      )}
+    </Suspense>
   )
 }
