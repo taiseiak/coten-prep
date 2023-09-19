@@ -59,26 +59,33 @@ export default function UserPage() {
       <div className="mx-auto">
         <Suspense fallback={<Loading />}>
           {data && (
-            <div className="place-self-center">
-              <h1 className="text-4xl font-extrabold leading-none text-slate-200">
-                {data.usersCollection?.edges[0].node.user_name}'s Yozora
-              </h1>
-              <div className="flex flex-col w-full snap-center">
-                {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
-                  (e: edge, i: number) =>
-                    e.node && (
-                      <div className="flex" key={i}>
-                        {e.node.image_path && e.node.description && (
-                          <Memory
-                            url={e.node.image_path}
-                            description={e.node.description}
-                          />
-                        )}
-                      </div>
-                    )
-                )}
+            <>
+              <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
+                <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+                  {data.usersCollection?.edges[0].node.user_name}'s Yozora
+                </h1>
+              </section>
+              <div className="place-self-center">
+                <h1 className="text-4xl font-extrabold leading-none text-slate-200">
+                  {data.usersCollection?.edges[0].node.user_name}'s Yozora
+                </h1>
+                <div className="flex flex-col w-full snap-center">
+                  {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
+                    (e: edge, i: number) =>
+                      e.node && (
+                        <div className="flex" key={i}>
+                          {e.node.image_path && e.node.description && (
+                            <Memory
+                              url={e.node.image_path}
+                              description={e.node.description}
+                            />
+                          )}
+                        </div>
+                      )
+                  )}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </Suspense>
       </div>
@@ -87,5 +94,7 @@ export default function UserPage() {
 }
 
 function Loading() {
-  return <h2>🌀 Loading...</h2>
+  return (
+    <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black"></section>
+  )
 }
