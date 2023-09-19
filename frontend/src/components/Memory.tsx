@@ -1,19 +1,23 @@
-import { Image, PresentationControls } from '@react-three/drei'
+import { Preload, PresentationControls } from '@react-three/drei'
 import { Suspense, useEffect, useState } from 'react'
-import { View } from './View'
-import { supabase } from '../utils/supabase'
 import { useInView } from 'react-intersection-observer'
+import { View } from './View'
+import TextAndImage from './TextAndImage'
+import { supabase } from '../utils/supabase'
 
-type MemoryProps = {
+export type MemoryProps = {
   url: string
+  description: string
 }
 
-export default function Memory({ url }: MemoryProps) {
+export default function Memory({ url, description }: MemoryProps) {
+  const [publicUrl, setPublicUrl] = useState<string>('')
+
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '-20%',
+    rootMargin: '20%',
   })
-  const [publicUrl, setPublicUrl] = useState<string>('')
+
   useEffect(() => {
     // "taiseiklasen-memories-bucket/DSCF1345.webp" => ["taiseiklasen-memories-bucket", "DSCF1345.webp", ""]
     const [bucketName, imagePath] = url.split(/\/(.*)/)
@@ -24,8 +28,8 @@ export default function Memory({ url }: MemoryProps) {
   return (
     <View
       ref={ref}
-      className={`duration-[2000ms] inset-0 h-screen w-full transition-all ${
-        inView ? 'translate-x-0' : '-translate-x-[80%]'
+      className={`duration-[2000ms] inset-0 h-screen grow transition-all ${
+        inView ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <Suspense fallback={null}>
@@ -37,8 +41,11 @@ export default function Memory({ url }: MemoryProps) {
           polar={[0, Math.PI / 8]}
           azimuth={[-Math.PI / 8, Math.PI / 8]}
         >
-          <Image transparent url={publicUrl} scale={5} />
+          <Suspense fallback={null}>
+            <TextAndImage publicUrl={publicUrl} description={description} />
+          </Suspense>
         </PresentationControls>
+        <Preload all />
       </Suspense>
     </View>
   )

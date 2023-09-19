@@ -55,24 +55,25 @@ export default function UserPage() {
   }
 
   return (
-    <section>
-      <div className="mx-auto grid max-w-screen-xl px-4 py-8">
+    <section className="snap-y snap-mandatory">
+      <div className="mx-auto">
         <Suspense fallback={<Loading />}>
           {data && (
-            <div className="mr-auto place-self-center">
-              <h1 className="max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+            <div className="place-self-center">
+              <h1 className="text-4xl font-extrabold leading-none text-slate-200">
                 {data.usersCollection?.edges[0].node.user_name}'s Yozora
               </h1>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full snap-center">
                 {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
                   (e: edge, i: number) =>
                     e.node && (
-                      <div className="text-slate-200 text-xl" key={i}>
-                        {e.node.description}
-                        {e.node.image_path ? (
-                          // <MemoryImage imageUrl={e.node.image_path} />
-                          <Memory url={e.node.image_path} />
-                        ) : null}
+                      <div className="flex" key={i}>
+                        {e.node.image_path && e.node.description && (
+                          <Memory
+                            url={e.node.image_path}
+                            description={e.node.description}
+                          />
+                        )}
                       </div>
                     )
                 )}
