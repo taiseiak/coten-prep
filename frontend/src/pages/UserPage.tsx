@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import { useQuery } from 'urql'
 import Memory from '../components/Memory'
@@ -32,6 +32,7 @@ type edge = {
 }
 
 export default function UserPage() {
+  const username = useRef('')
   const { userId } = useParams()
   const [{ data, error }] = useQuery({
     query: userMemoriesQuery,
@@ -39,6 +40,10 @@ export default function UserPage() {
       userName: userId,
     },
   })
+
+  useEffect(() => {
+    username.current = data?.usersCollection?.edges[0].node?.user_name ?? ''
+  }, [data])
 
   if (error) {
     return (
@@ -62,12 +67,16 @@ export default function UserPage() {
             <>
               <section className="intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
                 <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
-                  {data.usersCollection?.edges[0].node.user_name}'s Yozora
+                  {username.current.charAt(0).toUpperCase() +
+                    username.current.slice(1)}
+                  's Yozora
                 </h1>
               </section>
               <div className="place-self-center">
-                <h1 className="text-4xl font-extrabold leading-none text-slate-200">
-                  {data.usersCollection?.edges[0].node.user_name}'s Yozora
+                <h1 className="m-4 fixed text-4xl font-extrabold leading-none text-slate-200">
+                  {username.current.charAt(0).toUpperCase() +
+                    username.current.slice(1)}
+                  's Yozora
                 </h1>
                 <div className="flex flex-col w-full snap-center">
                   {data.usersCollection?.edges[0].node.memoriesCollection.edges.map(
