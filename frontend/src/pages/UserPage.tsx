@@ -56,20 +56,11 @@ export default function UserPage() {
   }
 
   return (
-    <section className="snap-y snap-mandatory">
+    <section>
       <div className="mx-auto">
         <Suspense fallback={<Loading />}>
           {data && (
             <>
-              <section className="z-20 intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
-                <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
-                  {data!
-                    .usersCollection!.edges[0].node!.user_name.charAt(0)
-                    .toUpperCase() +
-                    data!.usersCollection!.edges[0].node!.user_name.slice(1)}
-                  's Yozora
-                </h1>
-              </section>
               <div className="place-self-center">
                 <nav className="fixed flex justify-between w-full z-10">
                   <h1 className="m-4 text-4xl font-extrabold leading-none text-slate-200">
@@ -102,6 +93,15 @@ export default function UserPage() {
                   )}
                 </div>
               </div>
+              <section className="z-20 touch-none cursor-none intro fixed inset-0 flex h-screen w-screen animate-slide-out-top items-center justify-center bg-black">
+                <h1 className="animate-slide-out-fwd-center max-w-2xl text-4xl font-extrabold leading-none text-slate-200">
+                  {data!
+                    .usersCollection!.edges[0].node!.user_name.charAt(0)
+                    .toUpperCase() +
+                    data!.usersCollection!.edges[0].node!.user_name.slice(1)}
+                  's Yozora
+                </h1>
+              </section>
             </>
           )}
         </Suspense>

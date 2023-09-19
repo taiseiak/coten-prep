@@ -37,6 +37,7 @@ export default function Memory({ url, description }: MemoryProps) {
           <Suspense fallback={null}>
             <PresentationControls
               // global
+              enabled={false}
               snap
               zoom={0.8}
               polar={[0, Math.PI / 8]}

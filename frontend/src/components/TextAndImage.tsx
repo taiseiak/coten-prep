@@ -32,7 +32,7 @@ export default function TextAndImage({
         position-z={-2}
         transparent
         url={publicUrl}
-        scale={5}
+        scale={4}
       />
       <Text
         position-y={-1}
@@ -41,8 +41,8 @@ export default function TextAndImage({
         outlineColor="Khaki"
         anchorX="center"
         anchorY="middle"
-        fontSize={0.4}
-        maxWidth={5}
+        fontSize={0.3}
+        maxWidth={3}
       >
         {description}
       </Text>

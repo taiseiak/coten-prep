@@ -33,7 +33,7 @@ export default function Scroll({ children }: ScrollProps) {
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      smoothTouch: false,
+      smoothTouch: true,
       touchMultiplier: 2,
       infinite: false,
     })
@@ -80,7 +80,7 @@ export const ScrollTicker = ({ smooth = 9999999 }) => {
   useFrame(({ viewport, camera }, delta) => {
     camera.position.y = damp(
       camera.position.y,
-      -state.progress * viewport.height * 5,
+      -state.progress * viewport.height,
       smooth,
       delta
     )
